@@ -1,2 +1,2 @@
 # HackTheBox
- Walktrough of pentesting done on HTB machines
+ Walktrough of pentesting exercises done on HTB machines
