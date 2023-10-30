@@ -32,7 +32,8 @@ The script demands two parameters:
 Now the question is: what was my target url?    
 My goal at this point was trying to retrieve the **Master Token**, that will grant me the access to all the baskets on the server, as you can see in the screenshot below.  
 ![Alt text](image-4.png)
-  
+
+**SPOILER ALERT:** that was absolutely not the solution, but I couldn't know yet.  
 Knowing that the port 80 was open, I thought to try to use the vulnerability to proxy the requests from the basket server to the port 80 on the same server.  
 I tried to run the command ```exploit.sh 10.10.11.224:55555 http://10.10.11.224:80 ``` , but i got nothing.  
 So I thought that maybe some service was running on the localhost, so i tried:  
@@ -62,4 +63,20 @@ I started to browse through the filesystem I collected some infos:
 Now to find the root flag it is needed some privilege escalation.  
 
 ## Privilege Escalation
+Some standard procedure of enumeration:
+![Alt text](image-8.png)  
+  
+And, more interestingly...  
+![Alt text](image-9.png)
+  
+... telling us that all users can run, **as the sudo**, the trail.service under systemctl.  
+A common way to perform privilege escalation in this kind of situations is to inject a payload of a reverse shell in the file shown up there.  
+But in this case, remembering the Low Hanging Fruit statement, the solution was way simplier: the terminal showed the command that I could run with sudo. I did so:  
+``` sudo systemctl status trail.service ``` 
 
+that showed a bunch of info useless for the purposes of this PT.  
+At this point the only thing needed was to exit this text interface, with a command like ``` !sh ``` and now we are in the sudo space!  
+    
+![Alt text](image-10.png)
+  
+The root flag, as always, can be found browsing through the filesystem to the Desktop.
