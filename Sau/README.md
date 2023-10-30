@@ -52,12 +52,14 @@ I set up a nc listener and then launched the exploit.
 ![Alt text](image-7.png)  
   
 Now I have a functioning reverse shell on the remote server.  
-I started to browse trough the filesystem i collected some infos:  
+I started to browse through the filesystem I collected some infos:  
 - One user called *puma* ;
 - Two file on puma's desktop: *linpeas.sh* and *user.txt*.  
   
 *linpeas.sh*, contained a script to linPEAS, a tool used to do privilege escalation for penetration testing purposes.
-*user.txt* contains a single string: 166e3438c4091d52f02534efa413a85. **The first flag is eventually found.**  
+*user.txt* contains a single string: the hash. **The first flag is eventually found.**  
   
 Now to find the root flag it is needed some privilege escalation.  
+
+## Privilege Escalation
 
