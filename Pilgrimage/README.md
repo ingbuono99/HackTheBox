@@ -76,7 +76,16 @@ I will not explain all the process to use the exploit, but you can find all the 
 I did a first try using the image that was already on the repository. That image managed to get me to read the content of */etc/passwd*, **discovering a system user called Emily**.  
 Then i crafted the image to read the database repository and I used **Cyber Chefs** to decipher the output.    
 ![Alt text](image-6.png)
+
+Important to notice, there is another, better, way to read the content of the database and it is to dowload all in a .dump file and the open it in the **sqlite3** terminal.  
+![Alt text](image-8.png)
+![Alt text](image-9.png)
   
-I accomplished to get the credentials of the user Emily.  
+Either way I accomplished to get the credentials of the user Emily. *Images* table is empty.  
 **I could then open a ssh session and retrieve the first flag**, the file *user.txt*.  
+  
 ![Alt text](image-7.png)
+
+## Privilege escalation
+I did some basic checks, like ```sudo -l``` or ```ip address``` but nothing showed up. User Emily can't run sudo.  
+So i went back and downloaded the sqlite database dump in a file .dump, then i opened it with sqlite terminal.
