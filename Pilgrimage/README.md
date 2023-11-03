@@ -88,4 +88,4 @@ Either way I accomplished to get the credentials of the user Emily. *Images* tab
 
 ## Privilege escalation
 I did some basic checks, like ```sudo -l``` or ```ip address``` but nothing showed up. User Emily can't run sudo.  
-So i went back and downloaded the sqlite database dump in a file .dump, then i opened it with sqlite terminal.
+
