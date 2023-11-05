@@ -57,7 +57,7 @@ I started to browse through the filesystem I collected some infos:
 - One user called *puma* ;
 - Two file on puma's desktop: *linpeas.sh* and *user.txt*.  
   
-*linpeas.sh*, contained a script to linPEAS, a tool used to do privilege escalation for penetration testing purposes.
+*linpeas.sh*, contained a script to linPEAS, probably some other user forgot to clean it up.
 *user.txt* contains a single string: the hash. **The first flag is eventually found.**  
   
 Now to find the root flag it is needed some privilege escalation.  
