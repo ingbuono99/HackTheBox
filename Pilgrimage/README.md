@@ -87,5 +87,20 @@ Either way I accomplished to get the credentials of the user Emily. *Images* tab
 ![Alt text](image-7.png)
 
 ## Privilege escalation
-I did some basic checks, like ```sudo -l``` or ```ip address``` but nothing showed up. User Emily can't run sudo.  
-
+I did some basic checks, like ```sudo -l``` but user Emily can't run sudo.  
+At this point I went directly with running Linpeas, but as far as I could see there was no potential privilege escalation vector.  
+I had to go back on the Pilgrimage dashboard and I tried to see if the credentials of user Emily also worked on the platform. They did, but the operation was also useless.  
+I then tried to check the processes runned by sudo on the machine, with the command ```ps -f -u root```.  
+I found a process called **malwarescan.sh** and I hoped that it was not a leftover from some other user.  
+The sh file was located in */usr/sbin/malwarescan.sh* and I had the permissions to read it:  
+  
+![Alt text](image-10.png)
+  
+This script monitores */var/www/pilgrimage.htb/shrunk* and checks the images with **Binwalk**. If there is a correspondence with the words contained in a blacklist, it deletes the image.  
+A quick lookup in the web and i found that Binwalk is a tool to analyze binaries, but, most important, it is affeceted by the CVE-2022-4510-Binwalk that basically consent to RCE.  
+I used this script https://github.com/electr0sm0g/CVE-2022-4510/blob/main/RCE_Binwalk.py to get a reverse shell by passing the parameters needed and the manually uploading the .png file that i got in the vulnerable directory */var/www/pilgrimage.htb/shrunk*.  
+  
+![Alt text](image-11.png)
+  
+**Be careful, that could potentially be some issues with the version of pyhton you're running.**  
+Once Binwalk does its scan, the reverse shell gets activated and now we have access to the root flag on the remote host.  
