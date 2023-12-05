@@ -98,9 +98,12 @@ The sh file was located in */usr/sbin/malwarescan.sh* and I had the permissions 
   
 This script monitores */var/www/pilgrimage.htb/shrunk* and checks the images with **Binwalk**. If there is a correspondence with the words contained in a blacklist, it deletes the image.  
 A quick lookup in the web and i found that Binwalk is a tool to analyze binaries, but, most important, it is affeceted by the CVE-2022-4510-Binwalk that basically consent to RCE.  
-I used this script https://github.com/electr0sm0g/CVE-2022-4510/blob/main/RCE_Binwalk.py to get a reverse shell by passing the parameters needed and the manually uploading the .png file that i got in the vulnerable directory */var/www/pilgrimage.htb/shrunk*.  
+I used this script https://github.com/electr0sm0g/CVE-2022-4510/blob/main/RCE_Binwalk.py to get a reverse shell by passing the parameters needed and the manually uploading the .png file that i got in the vulnerable directory */var/www/pilgrimage.htb/shrunk*.     
+I set up a netcat listener on my machine and put the png exploit in the previously said directory. Once Binwalk does its scan, the reverse shell gets activated and now we have access to the root flag on the remote host.  
   
-![Alt text](image-11.png)
+![Alt text](image-12.png) 
   
-**Be careful, that could potentially be some issues with the version of pyhton you're running.**  
-Once Binwalk does its scan, the reverse shell gets activated and now we have access to the root flag on the remote host.  
+**IMPORTANT!**  
+A couple of things to notice:
+- There could be some issue in the script with the python version you're running. It is needed Python 3.x.
+- I didn't quite get why, but the script only seems to work to me if it is launched in the .../shrunk/ directory itself. Otherwise the reverse shell never got running.  
