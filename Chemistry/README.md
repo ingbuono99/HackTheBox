@@ -1,5 +1,5 @@
 ## Chemistry
-
+![alt text](image-25.png)  
 # Walkthrough
 First we do a nmap scan:  
 ![alt text](image.png)  
@@ -92,3 +92,43 @@ I could login via ssh with the rosa's credentials and was able to get the user f
 
 ## Privilege escalation
 It could be useful for later, let's keep in mind that other hashes were stored in the user table in the sqlite database (also the admin ones).  
+Tried to do some basic PE checks, but user rosa is not in the sudoers.  
+I transfered the linpeas script on rosa and launched it. I also started the hash cracking on the other hashes found in the database.  
+![alt text](image-14.png)  
+![alt text](image-15.png)  
+I already encountered that CVE, but that doesn't really lead to anything useful.  
+Other than that, linpeas couldn't find other interesting findings.  
+John found these other credentials, got to see if one of this belongs to the admin:  
+![alt text](image-16.png)  
+None of this users has access to the machine (also verifiable by looking at /etc/hosts), but maybe these credentials could be useful later on.  
+  
+By lookin again at the linpeas report, I noticed a running service on port 8080:  
+![alt text](image-17.png)  
+I couldn't access it from the external network, so I had to do some pivoting. Socat of course was not installed, so i simply did a port forwarding:  
+![alt text](image-18.png)  
+The command should be:  
+```python
+ssh -L -N 5544:localhost:8080 rosa@10.10.11.38
+```  
+![alt text](image-19.png)  
+  
+From this new webapp I can only see the running and stopped services on the remote machine:  
+![alt text](image-20.png)  
+I looked at these services looking for something suspicious, but i could't get anything useful.  
+I then tried to nmap this new discovered port:  
+![alt text](image-21.png)  
+The nmap discoveres the aiohttp version 3.9.1. I took a look online to find known CVE and i found:  https://github.com/wizarddos/CVE-2024-23334  
+  
+I should be able to read a arbitrary files with this PoC.  
+To make it work I need a static directory on the remote application. I did a brief fuzzing:  
+![alt text](image-22.png)  
+  
+And then launched the script:  
+![alt text](image-23.png)  
+The scripts works as I'm able to read the /etc/hosts. Let's capture the root flag! 
+  
+![alt text](image-24.png)
+
+
+
+
